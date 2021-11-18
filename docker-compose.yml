@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run dev
+    environment:
+      NODE_ENV: development
+      MOUNT_PATH: /tmp
+    volumes:
+      - .:/src
+    ports:
+      - "4000:3000"
