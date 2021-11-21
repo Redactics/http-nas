@@ -1,12 +1,13 @@
 version: '3.7'
 services:
-  api:
+  nas:
     build:
       context: .
       dockerfile: Dockerfile
     command: npm run test
     environment:
       NODE_ENV: test
+      STORAGE_PATH: /tmp
     volumes:
       - .:/src
     ports:

@@ -1,8 +1,0 @@
-version: '3.7'
-services:
-  api:
-    image: gcr.io/redactics-prod-310503/agent-api:${CIRCLE_SHA1}
-    command: npm run test
-    environment:
-      NODE_ENV: test
-      

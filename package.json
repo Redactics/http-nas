@@ -1,5 +1,5 @@
 {
-  "name": "http-disk",
+  "name": "http-nas",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.9.0",
+    "pm2": "^5.1.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.3",
     "yaml": "^1.10.0"

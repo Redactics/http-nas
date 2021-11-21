@@ -1,7 +1,6 @@
-FROM node:12-buster
+FROM node:12-bullseye-slim
 
-RUN apt update && apt install -y vim
-RUN npm install -g pm2
+RUN apt update && apt install -y curl
 
 WORKDIR /src
 COPY package.json /src/
