@@ -5,6 +5,13 @@ var fs = require('fs');
 
 exports.get = async function(req, res) {
   try {
+    if (!req.params.filename) {
+      // health check
+      const checkStorageRoot = fs.lstatSync(process.env.STORAGE_PATH.replace(/\/+$/,''));
+      if (checkStorageRoot.isDirectory()) {
+        return res.sendStatus(200);
+      }
+    }
     const filePath = process.env.STORAGE_PATH.replace(/\/+$/,'') + "/" + decodeURIComponent(req.params.filename);
     if (!fs.existsSync(filePath)) {
       console.log(`${filePath} doesn't exist, ignoring stream request`);
@@ -23,7 +30,7 @@ exports.get = async function(req, res) {
       return res.send(fileListing);
     }
 
-
+    // stream file
     const stream = fs.createReadStream(filePath);
 
     stream.on('open', () => {

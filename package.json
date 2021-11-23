@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly ./api/server.ts",
     "prod": "tsc && node ./build/server.js",
-    "test": "jest -i --forceExit api/tests/*.test.js"
+    "test": "jest -i --forceExit tests/*.test.js"
   },
   "repository": {
     "type": "git",
