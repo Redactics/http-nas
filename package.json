@@ -41,6 +41,7 @@
     "babel-jest": "^26.1.0",
     "eslint": "^8.4.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-plugin-import": "^2.25.3",
     "jest": "^26.1.0",
     "supertest": "^4.0.2",
