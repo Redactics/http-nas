@@ -1,10 +1,11 @@
 import express from 'express';
-var router = express.Router();
-var streams = require('./streams');
+import { getFiles, postFile, deleteFiles } from './streams';
 
-router.get('/file', streams.get); // healthcheck
-router.get('/file/:filename', streams.get);
-router.post('/file/:filename', streams.post);
-router.delete('/file/:filename', streams.delete);
+const router = express.Router();
 
-module.exports = router;
+router.get('/file', getFiles); // healthcheck
+router.get('/file/:filename', getFiles);
+router.post('/file/:filename', postFile);
+router.delete('/file/:filename', deleteFiles);
+
+export default router;

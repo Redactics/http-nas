@@ -7,6 +7,6 @@ COPY package.json /src/
 RUN npm install
 ENV PATH="/src/node_modules/.bin:${PATH}"
 COPY . /src
-RUN tsc || true
+RUN tsc
 
 CMD ["pm2-runtime", "-i", "max", "build/server.js"]

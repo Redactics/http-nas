@@ -1,10 +1,9 @@
 import express from 'express';
+import routes from './routes';
 
 // Create a new express application instance
 const app: express.Application = express();
 
-const routes = require('./routes');
-
 app.use('/', routes);
 
-module.exports = app;
+export default app;
