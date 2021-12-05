@@ -1,18 +1,21 @@
-// TODO: Typescript support
-//import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 var http = require('http');
 var fs = require('fs');
 
-exports.get = async function(req, res) {
+exports.get = async function(req: Request, res: Response) {
   try {
+    const storagePath = process.env.STORAGE_PATH || "/tmp";
     if (!req.params.filename) {
       // health check
-      const checkStorageRoot = fs.lstatSync(process.env.STORAGE_PATH.replace(/\/+$/,''));
+      const checkStorageRoot = fs.lstatSync(storagePath.replace(/\/+$/,''));
       if (checkStorageRoot.isDirectory()) {
         return res.sendStatus(200);
       }
+      else {
+        return res.sendStatus(400);
+      }
     }
-    const filePath = process.env.STORAGE_PATH.replace(/\/+$/,'') + "/" + decodeURIComponent(req.params.filename);
+    const filePath = storagePath.replace(/\/+$/,'') + "/" + decodeURIComponent(req.params.filename);
     if (!fs.existsSync(filePath)) {
       console.log(`${filePath} doesn't exist, ignoring stream request`);
       return res.sendStatus(404);
@@ -23,7 +26,7 @@ exports.get = async function(req, res) {
       console.log(`Listing directory contents: ${filePath}`)
       const files = fs.readdirSync(filePath);
       var fileListing = "";
-      files.forEach(file => {
+      files.forEach((file: string) => {
         fileListing += file + "\n";
       });
 
@@ -48,18 +51,19 @@ exports.get = async function(req, res) {
     });
   }
   catch(err) {
-    console.log("CATCH ERROR", e)
+    console.log("CATCH ERROR", err)
     res.status(400).send(err);
   }
 }
 
-exports.post = async function(req, res) {
+exports.post = async function(req: Request, res: Response) {
   try {
-    const storagePath = decodeURIComponent(req.params.filename).replace(/^\/+/,'');
-    const filePath = process.env.STORAGE_PATH.replace(/\/+$/,'') + "/" + storagePath;
+    const storagePath = process.env.STORAGE_PATH || "/tmp";
+    const url = decodeURIComponent(req.params.filename).replace(/^\/+/,'');
+    const filePath = storagePath.replace(/\/+$/,'') + "/" + url;
 
     // directory creation, as necessary
-    if (storagePath.includes('/')) {
+    if (url.includes('/')) {
       var dirArr = filePath.split('/');
       dirArr.pop();
       const directories = dirArr.join('/');
@@ -88,7 +92,7 @@ exports.post = async function(req, res) {
       res.sendStatus(200);
     });
     
-    stream.on('error', err => {
+    stream.on('error', (err: string) => {
       console.error(err);
       res.status(400).send(err);
     });
@@ -99,9 +103,10 @@ exports.post = async function(req, res) {
   }
 }
 
-exports.delete = async function(req, res) {
+exports.delete = async function(req: Request, res: Response) {
   try {
-    const filePath = process.env.STORAGE_PATH.replace(/\/+$/,'') + "/" + decodeURIComponent(req.params.filename).replace(/^\/+/,'');
+    const storagePath = process.env.STORAGE_PATH || "/tmp";
+    const filePath = storagePath.replace(/\/+$/,'') + "/" + decodeURIComponent(req.params.filename).replace(/^\/+/,'');
     if (!fs.existsSync(filePath)) {
       console.log(`${filePath} doesn't exist, ignoring delete request`);
       return res.sendStatus(200);
