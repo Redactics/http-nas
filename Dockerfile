@@ -9,4 +9,8 @@ ENV PATH="/src/node_modules/.bin:${PATH}"
 COPY . /src
 RUN tsc
 
+RUN useradd -u 2000 -ms /bin/bash nas && \
+    chown -R nas /tmp
+USER nas
+
 CMD ["pm2-runtime", "-i", "max", "build/server.js"]
