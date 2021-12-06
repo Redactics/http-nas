@@ -127,3 +127,37 @@ export async function deleteFiles(req: Request, res: Response) {
     res.status(400).send(e);
   }
 }
+
+export async function mvFile(req: Request, res: Response) {
+  try {
+    const storagePath = process.env.STORAGE_PATH || '/tmp';
+    const url = decodeURIComponent(req.params.filename).replace(/^\/+/, '');
+    const filePath = `${storagePath.replace(/\/+$/, '')}/${url}`;
+    const newPath = `${storagePath.replace(/\/+$/, '')}/${decodeURIComponent(req.body.path).replace(/^\/+/, '')}`;
+
+    if (!fs.existsSync(filePath)) {
+      logger.info(`${filePath} doesn't exist, ignoring mv request`);
+      return res.sendStatus(404);
+    }
+    // directory creation, as necessary
+    if (url.includes('/')) {
+      const dirArr = newPath.split('/');
+      dirArr.pop();
+      const directories = dirArr.join('/');
+      if (!fs.existsSync(directories)) {
+        logger.info(`Creating ${directories}`);
+        fs.mkdirSync(directories, {
+          recursive: true,
+        });
+      }
+    }
+
+    logger.info(`Moving file ${filePath} to ${newPath}`);
+
+    fs.renameSync(filePath, newPath);
+    return res.sendStatus(200);
+  } catch (e) {
+    logger.error(e);
+    res.status(400).send(e);
+  }
+}

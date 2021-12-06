@@ -100,7 +100,7 @@ describe('Stream methods user', () => {
   });
 
   it('create large file in directory', async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(60000);
 
     // Create a file of 1 GiB
     return createEmptyFileOfSize('/tmp/largefileinput', 1024*1024*1024)
@@ -131,6 +131,41 @@ describe('Stream methods user', () => {
   //   expect(res.status).toBe(200);
   // });
 
+  it('attempt to mv a file that doesn\'t exist', async () => {
+    const res = await agent.put('/file/nofile.txt', {
+      path: "nofilemoved.txt"
+    });
+
+    expect(res.status).toBe(404);
+  });
+
+  it('mv largefile in same directory', async () => {
+    const res = await agent.put('/file/testdir%2Flargefile')
+    .send({
+      path: "testdir%2Flargefilemoved"
+    })
+
+    expect(res.status).toBe(200);
+    expect(fs.existsSync('/tmp/testdir/largefilemoved')).toBe(true);
+  });
+
+  it('mv largefile to a new directory', async () => {
+    const res = await agent.put('/file/testdir%2Flargefilemoved')
+    .send({
+      path: "testmoved%2Flargefilemoved"
+    })
+
+    expect(res.status).toBe(200);
+    expect(fs.existsSync('/tmp/testmoved/largefilemoved')).toBe(true);
+  });
+
+  it('delete largefileinput', async () => {
+    const res = await agent.delete('/file/largefileinput');
+
+    expect(res.status).toBe(200);
+    expect(fs.existsSync('/tmp/largefileinput')).toBe(false);
+  });
+
   it('delete testfile', async () => {
     const res = await agent.delete('/file/testfile');
 
@@ -143,5 +178,12 @@ describe('Stream methods user', () => {
 
     expect(res.status).toBe(200);
     expect(fs.existsSync('/tmp/testdir')).toBe(false);
+  });
+
+  it('delete testmoved', async () => {
+    const res = await agent.delete('/file/testmoved');
+
+    expect(res.status).toBe(200);
+    expect(fs.existsSync('/tmp/testmoved')).toBe(false);
   });
 })
