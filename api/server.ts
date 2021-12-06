@@ -1,4 +1,6 @@
-const app = require('./app')
-const PORT = process.env.PORT || 3000
+import logger from './winston';
+import app from './app';
 
-app.listen(PORT, () => console.log("Listening on port: " + PORT))
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => logger.info(`Listening on port: ${PORT}`));

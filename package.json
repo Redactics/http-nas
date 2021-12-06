@@ -7,7 +7,8 @@
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly ./api/server.ts",
     "prod": "tsc && node ./build/server.js",
-    "test": "jest -i --forceExit tests/*.test.js"
+    "test": "jest -i --forceExit tests/*.test.js",
+    "eslint": "eslint api/*"
   },
   "repository": {
     "type": "git",
@@ -29,13 +30,20 @@
     "pm2": "^5.1.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.3",
+    "winston": "^3.3.3",
     "yaml": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "babel-jest": "^26.1.0",
+    "eslint": "^8.4.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-plugin-import": "^2.25.3",
     "jest": "^26.1.0",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.1"
