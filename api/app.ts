@@ -3,7 +3,7 @@ import routes from './routes';
 
 // Create a new express application instance
 const app: express.Application = express();
-
+app.use(express.json());
 app.use('/', routes);
 
 export default app;
