@@ -37,7 +37,7 @@ spec:
             - name: NODE_ENV
               value: production
             - name: STORAGE_PATH
-              value: /mnt/storage
+              value: {{ .Values.storagePath }}
           ports:
             - name: http
               containerPort: 3000
@@ -51,7 +51,7 @@ spec:
               path: /file
               port: http
           volumeMounts:
-            - mountPath: /mnt/storage
+            - mountPath: {{ .Values.storagePath }}
               name: storage
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
