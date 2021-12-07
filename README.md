@@ -15,8 +15,10 @@ Job pipelines that run in Kubernetes (for example, Airflow `KubernetesPodOperato
 
 You can install this service via the helmchart included in this repo, or via:
 
-`helm repo add redactics https://redactics.github.io/http-nas`
-`helm install http-nas redactics/http-nas --set "pvc.size=10Gi"`
+```
+helm repo add redactics https://redactics.github.io/http-nas
+helm install http-nas redactics/http-nas --set "pvc.size=10Gi"
+```
 
 This deploys the file streaming to your Kubernetes cluster with a PersistentVolumeClaim for storing files within this service of 10GB (you can of course adjust this to whatever size you want). Then, from inside your cluster you can run any of the following commands to interact with this service:
 
