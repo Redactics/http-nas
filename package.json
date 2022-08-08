@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joeauty/redactics-api.git"
+    "url": "git+https://github.com/Redactics/http-nas.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/joeauty/redactics-api/issues"
+    "url": "https://github.com/Redactics/http-nas.git/issues"
   },
-  "homepage": "https://github.com/joeauty/redactics-api#readme",
+  "homepage": "https://github.com/Redactics/http-nas.git#readme",
   "dependencies": {
     "@types/express": "^4.17.6",
     "argon2": "^0.26.2",

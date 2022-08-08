@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import logger from './winston';
 
 const fs = require('fs');
+const readline = require('readline');
 
 /* eslint consistent-return: off */
 
@@ -51,6 +52,36 @@ export async function getFiles(req: Request, res: Response) {
     stream.on('close', () => {
       logger.info('Processing  ...  100%');
     });
+  } catch (err) {
+    logger.error(err);
+    res.status(400).send(err);
+  }
+}
+
+export async function getWC(req: Request, res: Response) {
+  try {
+    // outputs the equivalent of a Linux wc -l
+    const storagePath = process.env.STORAGE_PATH || '/tmp';
+    if (!req.params.filename) {
+      return res.sendStatus(400);
+    }
+    const filePath = `${storagePath.replace(/\/+$/, '')}/${decodeURIComponent(req.params.filename)}`;
+    if (!fs.existsSync(filePath)) {
+      logger.info(`${filePath} doesn't exist, ignoring stream request`);
+      return res.sendStatus(404);
+    }
+    // stream file
+    const stream = fs.createReadStream(filePath);
+
+    let lines = 0;
+    const rl = readline.createInterface({
+      input: stream,
+      output: process.stdout,
+    });
+    rl.on('line', () => {
+      lines += 1;
+    });
+    rl.on('close', () => res.status(200).send(lines.toString()));
   } catch (err) {
     logger.error(err);
     res.status(400).send(err);

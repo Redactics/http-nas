@@ -81,6 +81,20 @@ describe('Stream methods user', () => {
     expect(res.status).toBe(200);
   });
 
+  it('create multi-line file', async () => {
+    const res = await agent.post('/file/testfileML')
+    .send("file contents\nline2\nline3")
+
+    expect(res.status).toBe(200);
+  });
+
+  it('get linecount on multi-line file', async () => {
+    const res = await agent.get('/file/testfileML/wc')
+
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('3')
+  })
+
   it('check that parent directory was created', async () => {
     expect(fs.existsSync('/tmp/testdir')).toBe(true);
   })
