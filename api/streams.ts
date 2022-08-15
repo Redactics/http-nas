@@ -134,13 +134,53 @@ export async function postFile(req: Request, res: Response) {
   }
 }
 
+export async function putFile(req: Request, res: Response) {
+  try {
+    const storagePath = process.env.STORAGE_PATH || '/tmp';
+    const url = decodeURIComponent(req.params.filename).replace(/^\/+/, '');
+    const filePath = `${storagePath.replace(/\/+$/, '')}/${url}`;
+
+    if (!fs.existsSync(filePath)) {
+      logger.info(`${filePath} doesn't exist, ignoring put request`);
+      return res.sendStatus(404);
+    }
+
+    const stream = fs.createWriteStream(filePath, {
+      'flags': 'a'
+    });
+
+    stream.on('open', () => {
+      logger.info(`Preparing to write ${filePath}`);
+      req.pipe(stream);
+    });
+
+    stream.on('drain', () => {
+      const written = parseInt(stream.bytesWritten, 10);
+      logger.info(`Processing  ...  ${written} bytes written`);
+    });
+
+    stream.on('close', () => {
+      logger.info('Processing  ...  100%');
+      res.sendStatus(200);
+    });
+
+    stream.on('error', (err: string) => {
+      logger.error(err);
+      res.status(400).send(err);
+    });
+  } catch (e) {
+    logger.error(e);
+    res.status(400).send(e);
+  }
+}
+
 export async function deleteFiles(req: Request, res: Response) {
   try {
     const storagePath = process.env.STORAGE_PATH || '/tmp';
     const filePath = `${storagePath.replace(/\/+$/, '')}/${decodeURIComponent(req.params.filename).replace(/^\/+/, '')}`;
     if (!fs.existsSync(filePath)) {
       logger.info(`${filePath} doesn't exist, ignoring delete request`);
-      return res.sendStatus(200);
+      return res.sendStatus(404);
     }
 
     logger.info(`Deleting file/directory ${filePath}`);

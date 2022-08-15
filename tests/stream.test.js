@@ -83,7 +83,7 @@ describe('Stream methods user', () => {
 
   it('create multi-line file', async () => {
     const res = await agent.post('/file/testfileML')
-    .send("file contents\nline2\nline3")
+    .send("file contents\nline2\nline3\n")
 
     expect(res.status).toBe(200);
   });
@@ -93,11 +93,24 @@ describe('Stream methods user', () => {
 
     expect(res.status).toBe(200);
     expect(res.text).toBe('3')
-  })
+  });
+
+  it('append to file', async () => {
+    const res = await agent.put('/file/testfileML')
+    .send("line4\n")
+
+    expect(res.status).toBe(200);
+  });
+
+  it('confirm file contents', async () => {
+    const file = await fs.readFileSync('/tmp/testfileML', 'utf8');
+    console.log("FILE", file);
+    expect(file).toEqual("file contents\nline2\nline3\nline4\n");
+  });
 
   it('check that parent directory was created', async () => {
     expect(fs.existsSync('/tmp/testdir')).toBe(true);
-  })
+  });
 
   it('stream small file from directory', async () => {
     const res = await agent.get('/file/testdir%2Ftestfile2')
@@ -146,7 +159,7 @@ describe('Stream methods user', () => {
   // });
 
   it('attempt to mv a file that doesn\'t exist', async () => {
-    const res = await agent.put('/file/nofile.txt', {
+    const res = await agent.put('/file/nofile.txt/mv', {
       path: "nofilemoved.txt"
     });
 
@@ -154,7 +167,7 @@ describe('Stream methods user', () => {
   });
 
   it('mv largefile in same directory', async () => {
-    const res = await agent.put('/file/testdir%2Flargefile')
+    const res = await agent.put('/file/testdir%2Flargefile/mv')
     .send({
       path: "testdir%2Flargefilemoved"
     })
@@ -164,7 +177,7 @@ describe('Stream methods user', () => {
   });
 
   it('mv largefile to a new directory', async () => {
-    const res = await agent.put('/file/testdir%2Flargefilemoved')
+    const res = await agent.put('/file/testdir%2Flargefilemoved/mv')
     .send({
       path: "testmoved%2Flargefilemoved"
     })
