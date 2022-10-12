@@ -1,6 +1,6 @@
 ### About
 
-This is very lightweight Node.js http file streamer that functions as NAS (network attached storage) with Kubernetes usage in mind. We make heavy use of this at [Redactics](https://www.redactics.com).
+This is very lightweight Node.js http file streamer that functions as NAS (network attached storage) with Kubernetes usage in mind. We make heavy use of this at [Redactics](https://www.redactics.com). You can learn more about this from [this blog post](https://dev.to/joeauty/open-source-media-streaming-service-for-kubernetes-1k62).
 
 ### Huh, Weird... Why Does the World Need This?
 
