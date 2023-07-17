@@ -95,6 +95,13 @@ describe('Stream methods user', () => {
     expect(res.text).toBe('3')
   });
 
+  it('get file stats', async () => {
+    const res = await agent.get('/file/testfileML/check')
+
+    expect(res.body.size).toBe(26);
+    expect(res.body.uid).toBe(2000);
+  });
+
   it('append to file', async () => {
     const res = await agent.put('/file/testfileML')
     .send("line4\n")

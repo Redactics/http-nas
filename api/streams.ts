@@ -88,6 +88,25 @@ export async function getWC(req: Request, res: Response) {
   }
 }
 
+export async function getStats(req: Request, res: Response) {
+  try {
+    // determines whether the file contains data
+    const storagePath = process.env.STORAGE_PATH || '/tmp';
+    if (!req.params.filename) {
+      return res.sendStatus(400);
+    }
+    const filePath = `${storagePath.replace(/\/+$/, '')}/${decodeURIComponent(req.params.filename)}`;
+    if (!fs.existsSync(filePath)) {
+      logger.info(`${filePath} doesn't exist, ignoring request`);
+      return res.sendStatus(404);
+    }
+    const stat = await fs.lstatSync(filePath);
+    return res.status(200).send(stat);
+  } catch (err) {
+
+  }
+}
+
 export async function postFile(req: Request, res: Response) {
   try {
     const storagePath = process.env.STORAGE_PATH || '/tmp';
