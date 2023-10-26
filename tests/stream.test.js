@@ -186,6 +186,11 @@ describe('Stream methods user', () => {
     expect(fs.existsSync('/tmp/testmoved/largefilemoved')).toBe(true);
   });
 
+  it('delete file that does not exist', async () => {
+    const res = await agent.delete('/file/blah');
+    expect(res.status).toBe(200);
+  });
+
   it('delete largefileinput', async () => {
     const res = await agent.delete('/file/largefileinput');
 

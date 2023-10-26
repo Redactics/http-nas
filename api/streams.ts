@@ -180,7 +180,7 @@ export async function deleteFiles(req: Request, res: Response) {
     const filePath = `${storagePath.replace(/\/+$/, '')}/${decodeURIComponent(req.params.filename).replace(/^\/+/, '')}`;
     if (!fs.existsSync(filePath)) {
       logger.info(`${filePath} doesn't exist, ignoring delete request`);
-      return res.sendStatus(404);
+      return res.sendStatus(200);
     }
 
     logger.info(`Deleting file/directory ${filePath}`);
